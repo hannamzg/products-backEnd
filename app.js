@@ -21,12 +21,6 @@ const Port = 5000;
 const upload = multer({ storage });
   */
 
-
-app.use(express.json());
-app.use(express.static("public"));
-app.use(cors());
-app.use("/api/auth",authRoutes);
-
 /* app.post("/upload", upload.single("image"), (req, res) => {
   const imageName = req.file.filename;
   const q ="INSERT INTO `admins` ( `name`, `email`, `password`, `photo`) VALUES (?)";
@@ -38,6 +32,12 @@ app.use("/api/auth",authRoutes);
   });
 });  */
  
+app.use(express.json());
+app.use(express.static("public"));
+app.use(cors());
+app.use("/api/auth",authRoutes);
+
+
 
 
 
