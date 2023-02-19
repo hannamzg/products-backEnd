@@ -59,7 +59,7 @@ export const singUp = (req, res) => {
     con.query(q, [values], (err, data) => {
         if (err) return res.status(502).json(err);
         if (error) return res.status(502).json(error.details[0].massage);
-        return res.status(200).json("done");
+        return res.status(200).json("Done");
     });
     
   });
@@ -69,21 +69,32 @@ export const singUp = (req, res) => {
 
 
 export const login = (req,res)=>{
-  const q = "SELECT * FROM  admins WHERE id = ?";
+  const q = "SELECT * FROM  admins WHERE email = ?";
 
-  con.query(q,[req.body.id],(err,data)=>{
+  con.query(q,[req.body.email],(err,data)=>{
 
       if(err) return res.status(500).json(err);
       if(data.length=== 0) return res.status(409).json("user not found");
 
       const checkPassword = bcrypt.compareSync(req.body.password,data[0].password);
 
-      if (!checkPassword)  return res.status(400).json("wrong password username");
+      if (!checkPassword)  return res.status(400).json("wrong password email");
 
       const token  =jwt.sign({id:data[0].id},"secretkey");
 
-     // const {password, ...others} = data[0]
+      const {password, ...others} = data[0]
 
-     return res.status(200).json(token);
+      res.cookie("ProductAccessToken",token,{
+          httpOnly:true,
+      }).status(200).json(others);
   })
+}
+
+
+export const logout = (req,res)=>{
+  res.clearCookie("ProductAccessToken",{
+      secure:true,
+      sameSite:'none',
+
+  }).status(200).json("User has been logged out .")
 }
