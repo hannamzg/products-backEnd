@@ -3,6 +3,7 @@ import { con } from "./connect.js";
 import cors from "cors";
 //import multer from "multer";
 import authRoutes from "./routes/auth.js";
+import addProduct from "./routes/addProduct.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -46,6 +47,7 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use("/api/auth",authRoutes);
+app.use("/api",addProduct);
 
 
 
