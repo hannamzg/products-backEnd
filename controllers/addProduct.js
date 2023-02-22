@@ -35,7 +35,7 @@ export const addProduct=(req,res)=>{
         const  q  ="INSERT INTO `products`(`photo`,`name`, `price`,`description`,  `adminId`, `createAt`) VALUES (?)" ;
 
         const values =[
-            imageName,
+          "/uploads/" + imageName,
             req.body.name, 
             req.body.price,
             req.body.description,
@@ -49,4 +49,45 @@ export const addProduct=(req,res)=>{
             return res.status(200).json("post created")
         })
     })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const getProduct=(req,res)=>{
+  const token = req.cookies.ProductAccessToken;
+  if(!token) return res.status(401).json("not logged in!");
+
+  jwt.verify(token,"secretkey", (err)=>{
+
+      if(err) return res.status(403).json("Token is not valid")
+
+      const  q  ="SELECT * FROM `products`" ;
+
+      con.query(q,(err,data)=>{
+        if(err) return res.status(500).json(err);
+        return res.status(200).json(data);
+      })
+
+     
+  })
 }
