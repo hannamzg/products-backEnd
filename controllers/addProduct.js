@@ -53,26 +53,6 @@ export const addProduct=(req,res)=>{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const getProduct=(req,res)=>{
   const token = req.cookies.ProductAccessToken;
   if(!token) return res.status(401).json("not logged in!");
@@ -87,7 +67,27 @@ export const getProduct=(req,res)=>{
         if(err) return res.status(500).json(err);
         return res.status(200).json(data);
       })
-
-     
   })
+}
+
+
+export const deleteProduct=(req,res)=>{
+  const token = req.cookies.ProductAccessToken;
+  if(!token) return res.status(401).json("not logged in!");
+ 
+  jwt.verify(token,"secretkey", (err)=>{ 
+
+      if(err) return res.status(403).json("Token is not valid")
+ 
+      let id =  req.params.id;
+      const  q  =`DELETE FROM products WHERE id=? ` ;
+
+      con.query(q,[id],(err,data)=>{
+        if(err) return res.status(500).json(err);
+        console.log(id);
+        return res.status(200).json("Product has been deleted");
+      })
+
+      
+  }) 
 }
