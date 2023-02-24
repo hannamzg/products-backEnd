@@ -3,6 +3,7 @@ import moment from 'moment/moment.js';
 import jwt from "jsonwebtoken";
 import { con } from "../connect.js";
 import multer from "multer";
+import { json } from 'express';
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -87,7 +88,36 @@ export const deleteProduct=(req,res)=>{
         console.log(id);
         return res.status(200).json("Product has been deleted");
       })
-
-      
   }) 
 }
+
+
+
+
+export const editProduct=(req,res)=>{
+  const token = req.cookies.ProductAccessToken;
+  if(!token) return res.status(401).json("not logged in!");
+ 
+  jwt.verify(token,"secretkey", (err)=>{ 
+ 
+    if(err) return res.status(403).json("Token is not valid")
+ 
+      const q = 'UPDATE `products` SET `name`=?,`description`=?,`price`=?,`photo`=? WHERE id=?' 
+
+      con.query(q,[
+          req.body.name,
+          req.body.description,
+          req.body.price,
+          req.body.photo,
+          req.body.id
+        ]
+        ,(err,data)=>{
+          if(err) return res.status(500).json(err);
+          //if (data.affectedRows > 0) return res.json("Product has been updated!");
+          return res.status(200).json("its has been")
+        }
+      )    
+   }) 
+}
+ 
+
