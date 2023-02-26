@@ -122,3 +122,28 @@ export const editProduct=(req,res)=>{
 }
  
 
+
+export const selectProductByCategories=(req,res)=>{
+    let categories =  req.params.categories;
+    
+    const q = 'SELECT * FROM `products` WHERE categories =? '
+
+    con.query(q,[categories],(err,data)=>{
+        if(err) return res.status(500).json(err);
+          return res.status(200).json(data)
+        }
+    )    
+   
+}
+
+export const getCategories=(req,res)=>{
+ 
+  const q = 'SELECT `categories` FROM `products`'
+
+  con.query(q,(err,data)=>{
+      if(err) return res.status(500).json(err);
+      return res.status(200).json(data)
+      }
+  )    
+ 
+}
