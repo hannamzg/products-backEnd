@@ -33,7 +33,7 @@ export const addProduct=(req,res)=>{
          imageName = req.file.filename
        }
 
-        const  q  ="INSERT INTO `products`(`photo`,`name`, `price`,`description`,  `adminId`, `createAt`) VALUES (?)" ;
+        const  q  ="INSERT INTO `products`(`photo`,`name`, `price`,`description`,  `adminId`, `createAt`,categories) VALUES (?)" ;
 
         const values =[
           "/uploads/" + imageName,
@@ -43,6 +43,7 @@ export const addProduct=(req,res)=>{
             //req.body.amount,
             req.body.adminId,
             moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+            req.body.categories
         ]
 
         con.query(q,[values],(err,data)=>{
@@ -62,7 +63,7 @@ export const getProduct=(req,res)=>{
 
       if(err) return res.status(403).json("Token is not valid")
 
-      const  q  ="SELECT * FROM `products`" ;
+      const  q  ="SELECT * FROM `products`  ORDER BY createAt DESC" ;
 
       con.query(q,(err,data)=>{
         if(err) return res.status(500).json(err);
@@ -85,7 +86,6 @@ export const deleteProduct=(req,res)=>{
 
       con.query(q,[id],(err,data)=>{
         if(err) return res.status(500).json(err);
-        console.log(id);
         return res.status(200).json("Product has been deleted");
       })
   }) 
@@ -102,13 +102,14 @@ export const editProduct=(req,res)=>{
  
     if(err) return res.status(403).json("Token is not valid")
  
-      const q = 'UPDATE `products` SET `name`=?,`description`=?,`price`=?,`photo`=? WHERE id=?' 
+      const q = 'UPDATE `products` SET `name`=?,`description`=?,`price`=?,`photo`=?,`categories`=? WHERE id=?' 
 
       con.query(q,[
           req.body.name,
           req.body.description,
           req.body.price,
           req.body.photo,
+          req.body.categories,
           req.body.id
         ]
         ,(err,data)=>{
