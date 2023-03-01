@@ -4,7 +4,7 @@ import multer from "multer";
 import joi from "joi";
 import jwt from "jsonwebtoken";
 
-const storage = multer.diskStorage({
+export const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/uploads");
   },
@@ -55,10 +55,11 @@ export const singUp = (req, res) => {
       
     const {error} = validateUser(req.body);
    
-
+    if (error){ 
+      return res.status(502).json(error.details[0].message)
+    }
     con.query(q, [values], (err, data) => {
         if (err) return res.status(502).json(err);
-        if (error) return res.status(502).json(error.details[0].massage);
         return res.status(200).json("Done");
     });
     

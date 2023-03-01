@@ -122,6 +122,16 @@ export const editProduct=(req,res)=>{
 }
  
 
+export const getProductToProducts=(req,res)=>{
+  const  q  ="SELECT * FROM `products`  ORDER BY createAt DESC" ;
+
+  con.query(q,(err,data)=>{
+  if(err) return res.status(500).json(err);
+    return res.status(200).json(data);
+  })
+}
+
+
 
 export const selectProductByCategories=(req,res)=>{
     let categories =  req.params.categories;
@@ -136,14 +146,3 @@ export const selectProductByCategories=(req,res)=>{
    
 }
 
-export const getCategories=(req,res)=>{
- 
-  const q = 'SELECT `categories` FROM `products`'
-
-  con.query(q,(err,data)=>{
-      if(err) return res.status(500).json(err);
-      return res.status(200).json(data)
-      }
-  )    
- 
-}
