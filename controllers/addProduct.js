@@ -114,7 +114,6 @@ export const editProduct=(req,res)=>{
         ]
         ,(err,data)=>{
           if(err) return res.status(500).json(err);
-          //if (data.affectedRows > 0) return res.json("Product has been updated!");
           return res.status(200).json("its has been")
         }
       )    
@@ -144,5 +143,62 @@ export const selectProductByCategories=(req,res)=>{
         }
     )    
    
+}
+
+
+export const getProductById=(req,res)=>{
+    let id =  req.params.id;
+    
+    const q = 'SELECT * FROM `products` WHERE id=? '
+
+    con.query(q,[id],(err,data)=>{
+        if(err) return res.status(500).json(err);
+          return res.status(200).json(data)
+        }
+    )    
+   
+}
+
+
+
+
+export const AddToCart=(req,res)=>{
+  const token = req.cookies.UsersToken;
+  if(!token) return res.status(401).json("not logged in!");
+ 
+  jwt.verify(token,"secretkey", (err)=>{ 
+ 
+    if(err) return res.status(403).json("Token is not valid")
+ 
+    const  q  ="INSERT INTO `cart`(`userId`,`productId`) VALUES (?)" ;
+    const values = [
+      req.body.userId,
+      req.body.productId
+    ];
+      con.query(q,[values],(err,data)=>{
+          if(err) return res.status(500).json(err);
+          return res.status(200).json("its has been")
+        }
+      )    
+   }) 
+}
+
+
+
+export const getCartProducts=(req,res)=>{
+  const token = req.cookies.UsersToken;
+  if(!token) return res.status(401).json("not logged in!"); 
+ 
+  jwt.verify(token,"secretkey", (err)=>{ 
+ 
+    if(err) return res.status(403).json("Token is not valid") 
+   
+    const  q  ="SELECT products.* FROM `products` INNER JOIN cart ON cart.productId = products.id WHERE cart.userId =?" ; 
+    con.query(q,[req.params.userId],(err,data)=>{
+          if(err) return res.status(500).json(err);
+          return res.status(200).json(data)
+        }
+    )    
+  })  
 }
 
