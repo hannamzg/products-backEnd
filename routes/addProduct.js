@@ -1,5 +1,5 @@
 import express  from "express";
-import {addProduct,upload,getProduct,deleteProduct,editProduct,selectProductByCategories,getProductToProducts,getProductById,AddToCart,getCartProducts} from "../controllers/addProduct.js";
+import {addProduct,upload,getProduct,deleteProduct,editProduct,selectProductByCategories,getProductToProducts,getProductById,AddToCart,getCartProducts,DeleteCartProduct} from "../controllers/addProduct.js";
 
 const router = express.Router();
 
@@ -13,6 +13,7 @@ router.get("/getProductToProducts",getProductToProducts)
 router.get("/getProductById/:id",getProductById)
 router.post('/AddToCart',AddToCart)
 router.get("/getCartProducts/:userId",getCartProducts)
+router.delete("/DeleteCartProduct/:cartId",DeleteCartProduct)
 
 
 export default router;
