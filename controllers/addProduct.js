@@ -221,3 +221,16 @@ export const DeleteCartProduct=(req,res)=>{
   })  
 }
 
+
+export const searchInput=(req,res)=>{   
+
+  const  q  =`SELECT * FROM products WHERE name LIKE '${req.params.searchValue}%'` ; 
+
+  con.query(q,(err,data)=>{
+      if(err) return res.status(500).json(err);
+        return res.status(200).json(data)
+      }
+  )    
+   
+}
+
