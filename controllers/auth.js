@@ -36,7 +36,7 @@ export const singUp = (req, res) => {
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
     let imageName;
     if (!req.file) {
-      imageName = "1610652621462.jpg";
+      imageName = "1678459868031.jpg";
     } else {
       imageName = req.file.filename;
     }
