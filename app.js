@@ -10,11 +10,8 @@ import cookieParser from "cookie-parser";
 const app = express();
 const Port = 5000;
 
-
-
-
 app.use((req,res,next)=>{
-  res.header("Access-Control-Allow-Credentials",true)   
+  res.header("Access-Control-Allow-Credentials", true)   
   next()
  })
  
@@ -28,12 +25,6 @@ app.use(cookieParser());
 app.use("/api/auth",authRoutes);
 app.use("/api",addProduct);
 app.use("/api/authUsers",authUsers);
-
-
-
-
-
-
 
 con.connect((err) => {
   if (err) {

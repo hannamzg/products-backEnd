@@ -234,3 +234,48 @@ export const searchInput=(req,res)=>{
    
 }
 
+
+
+
+export const addRating=(req,res)=>{
+  const token = req.cookies.UsersToken;
+  
+  if(!token) return res.status(401).json("not logged in!"); 
+  
+  jwt.verify(token,"secretkey", (err)=>{ 
+    if(err) return res.status(403).json("Token is not valid") 
+   
+    const  q  ="INSERT INTO `rating`( `userId`, `productId`, `theRating`)  VALUES (?)" ; 
+
+    const values = [
+      req.body.userId,
+      req.body.productId,
+      req.body.theRating
+    ];
+
+    con.query(q,[values],(err,data)=>{
+          if(err) return res.status(500).json(err);
+          return res.status(200).json("thanks for your rating")
+        }
+    )    
+  })  
+}
+
+
+export const getTheRate=(req,res)=>{
+  const token = req.cookies.UsersToken;
+  
+  if(!token) return res.status(401).json("not logged in!"); 
+  
+  jwt.verify(token,"secretkey", (err)=>{ 
+    if(err) return res.status(403).json("Token is not valid") 
+   
+    const  q  =`SELECT * FROM rating WHERE productId=${req.params.id}` ; 
+
+    con.query(q,(err,data)=>{
+          if(err) return res.status(500).json(err);
+          return res.status(200).json(data)
+        }
+    )    
+  })  
+}
